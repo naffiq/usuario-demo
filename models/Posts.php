@@ -4,6 +4,9 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\SluggableBehavior;
+use yii\helpers\Url;
+use yii\web\Application;
 
 /**
  * This is the model class for table "posts".
@@ -11,6 +14,7 @@ use yii\behaviors\BlameableBehavior;
  * @property int $id
  * @property string $title
  * @property string $body
+ * @property string $slug
  */
 class Posts extends \yii\db\ActiveRecord
 {
@@ -30,7 +34,7 @@ class Posts extends \yii\db\ActiveRecord
         return [
             [['title', 'body'], 'required'],
             [['body'], 'string'],
-            ['author_id', 'safe'],
+            [['author_id', 'slug'], 'safe'],
             [['title'], 'string', 'max' => 255],
         ];
     }
@@ -71,7 +75,20 @@ class Posts extends \yii\db\ActiveRecord
                 'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'author_id',
                 'updatedByAttribute' => false,
+            ],
+            'slug' => [
+                'class' => SluggableBehavior::className(),
+                'attribute' => ['title', 'id'],
             ]
         ];
+    }
+
+    public function getUrl()
+    {
+        if (\Yii::$app instanceof Application) {
+            return Url::to(['posts/view', 'slug' => $this->slug]);
+        }
+
+        return '';
     }
 }

@@ -23,8 +23,8 @@ class PostsController extends Controller
     public function behaviors()
     {
         $post = null;
-        if ($postId = \Yii::$app->request->get('id')) {
-            $post = $this->findModel($postId);
+        if ($slug = \Yii::$app->request->get('slug')) {
+            $post = $this->findModel($slug);
         }
 
         return [
@@ -76,14 +76,14 @@ class PostsController extends Controller
 
     /**
      * Displays a single Posts model.
-     * @param integer $id
+     * @param string $slug
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($slug)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findModel($slug),
         ]);
     }
 
@@ -97,7 +97,7 @@ class PostsController extends Controller
         $model = new Posts();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect($model->getUrl());
         }
 
         return $this->render('create', [
@@ -108,16 +108,16 @@ class PostsController extends Controller
     /**
      * Updates an existing Posts model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param string $slug
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($slug)
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel($slug);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect($model->getUrl());
         }
 
         return $this->render('update', [
@@ -128,13 +128,13 @@ class PostsController extends Controller
     /**
      * Deletes an existing Posts model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
+     * @param string $slug
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
+    public function actionDelete($slug)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($slug)->delete();
 
         return $this->redirect(['index']);
     }
@@ -142,13 +142,13 @@ class PostsController extends Controller
     /**
      * Finds the Posts model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param string $slug
      * @return Posts the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel($slug)
     {
-        if (($model = Posts::findOne($id)) !== null) {
+        if (($model = Posts::findOne(['slug' => $slug])) !== null) {
             return $model;
         }
 

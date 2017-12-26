@@ -6,6 +6,8 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
+    'language' => 'en_EN',
+    'name' => 'Blogster',
     'bootstrap' => [
         'log', [
             'class' => \Da\User\Bootstrap::class
@@ -25,6 +27,14 @@ $config = [
         ],
         'authManager' => [
             'class' => \Da\User\Component\AuthDbManagerComponent::className()
+        ],
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => \yii\i18n\PhpMessageSource::class,
+                    'basePath' => '@app/translations'
+                ]
+            ]
         ],
         'user' => [
             'identityClass' => \app\models\User::class,
@@ -54,6 +64,11 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'posts/index' => 'posts/index',
+                'posts/create' => 'posts/create',
+                'posts/<slug>/update' => 'posts/update',
+                'posts/<slug>/delete' => 'posts/delete',
+                'posts/<slug>' => 'posts/view',
             ],
         ],
     ],

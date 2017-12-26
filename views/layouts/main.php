@@ -38,21 +38,21 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Пользователи', 'url' => ['/user/admin'], 'visible' => \Yii::$app->user->can('admin')],
+            ['label' => Yii::t('app', 'Главная'), 'url' => ['/site/index']],
+            ['label' => Yii::t('app', 'О сайте'), 'url' => ['/site/about']],
+            ['label' => Yii::t('app', 'Обратная связь'), 'url' => ['/site/contact']],
+            ['label' => Yii::t('app', 'Пользователи'), 'url' => ['/user/admin'], 'visible' => \Yii::$app->user->can('admin')],
 
 
-            ['label' => 'Posts', 'url' => ['/posts']],
+            ['label' => Yii::t('app', 'Посты'), 'url' => ['/posts']],
 
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/user/login']]
+                ['label' => Yii::t('app', 'Войти'), 'url' => ['/user/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/user/logout'], 'post')
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    Yii::t('app', 'Выйти') . ' (' . Yii::$app->user->identity->username . ')',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()
@@ -74,7 +74,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; Blogster by naffiq — <?= date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

@@ -33,6 +33,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
+                'urlCreator' => function ($action, \app\models\Posts $model) {
+                    switch ($action) {
+
+                        case 'update':
+                            return \yii\helpers\Url::to(['update', 'slug' => $model->slug]);
+
+                        case 'delete':
+                            return \yii\helpers\Url::to(['delete', 'slug' => $model->slug]);
+
+                        default:
+                            return $model->getUrl();
+                    }
+                },
                 'visibleButtons' => [
                     'update' => function (\app\models\Posts $model) {
                         return \Yii::$app->user->can('updatePost', ['post' => $model]);
